@@ -1,0 +1,10 @@
+server:
+  port: 8084
+  servlet-path: /helloworld
+  context-path: /helloworld
+spring:
+  application:
+    name: helloworld
+  mvc:
+    favicon:
+      enabled: false
