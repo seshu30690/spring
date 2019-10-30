@@ -1,0 +1,15 @@
+server:
+  port: 8022
+  servlet-path: /files
+  context-path: /files
+spring:
+  application:
+    name: files
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 200MB
+      max-request-size: 200MB
+application:
+  file-upload-dir: C:/delete/
