@@ -1,0 +1,28 @@
+app:
+ datasources:
+  sakila:
+   url: "jdbc:mysql://localhost:3306/movie?useTimezone=true&serverTimezone=UTC"
+   username: root
+   password: "Admin"
+  world:
+   url: "jdbc:mysql://localhost:3306/world?useTimezone=true&serverTimezone=UTC"
+   username: root
+   password: "Admin"
+
+# DataSource
+spring:
+ datasource:
+  driver-class-name: "com.mysql.jdbc.Driver"
+ jpa:
+  properties:
+   hibernate:
+    dialect: "org.hibernate.dialect.MySQL5Dialect"
+  show-sql: true
+  generate-ddl: false
+  hibernate:
+   ddl-auto: none
+
+server:
+ port: 9090
+
+
