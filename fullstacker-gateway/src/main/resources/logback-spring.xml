@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+
+<configuration scan="true" scanPeriod="5 minutes">
+    <include resource="org/springframework/boot/logging/logback/base.xml" />
+    <property name="LOG_PATH" value="D:/ELKTS/logs/fullstacker-gateway" />
+    <property name="UI_LOG_PATH" value="D:/ELKTS/logs/fullstacker-frontend"/>
+
+	<appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/fullstacker-gateway.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- rollover daily -->
+	        <fileNamePattern>${LOG_PATH}/fullstacker-gateway_%d{yyyyMMdd}_%i.log.zip</fileNamePattern>
+	        <!-- each file should be at most 30MB -->
+	        <maxFileSize>30MB</maxFileSize>
+	        <!-- this will keep 30 days worth of history -->
+	        <maxHistory>30</maxHistory>
+	        <totalSizeCap>900MB</totalSizeCap>
+    	</rollingPolicy>
+        <encoder>
+            <charset>utf-8</charset>
+            <pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %X{userName} %logger{0} : %replace(%msg){"PWD='.*'", "PWD='*****'"}%n</pattern>
+        </encoder>        
+    </appender>
+	
+	<appender name="UI_ADMIN_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${UI_LOG_PATH}/fullstacker-admin-ui.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- rollover daily -->
+	        <fileNamePattern>${UI_LOG_PATH}/fullstacker-admin-ui_%d{yyyyMMdd}_%i.log.zip</fileNamePattern>
+	        <!-- each file should be at most 30MB -->
+	        <maxFileSize>30MB</maxFileSize>
+	        <!-- this will keep 30 days worth of history -->
+	        <maxHistory>30</maxHistory>
+	        <totalSizeCap>900MB</totalSizeCap>
+    	</rollingPolicy>
+        <encoder>
+            <charset>utf-8</charset>
+            <pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %X{userName} %logger{0} : %replace(%msg){"PWD='.*'", "PWD='*****'"}%n</pattern>
+        </encoder>       
+    </appender>
+    
+    <appender name="UI_CCM_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${UI_LOG_PATH}/fullstacker-ccm-ui.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- rollover daily -->
+	        <fileNamePattern>${UI_LOG_PATH}/fullstacker-ccm-ui_%d{yyyyMMdd}_%i.log.zip</fileNamePattern>
+	        <!-- each file should be at most 30MB -->
+	        <maxFileSize>30MB</maxFileSize>
+	        <!-- this will keep 30 days worth of history -->
+	        <maxHistory>30</maxHistory>
+	        <totalSizeCap>900MB</totalSizeCap>
+    	</rollingPolicy>
+        <encoder>
+            <charset>utf-8</charset>
+            <pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %X{userName} %logger{0} : %replace(%msg){"PWD='.*'", "PWD='*****'"}%n</pattern>
+        </encoder>       
+    </appender>
+    
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+    	<discardingThreshold>0</discardingThreshold>
+        <queueSize>500</queueSize>
+        <appender-ref ref="ROLLING_FILE"/>
+    </appender>
+
+   	<logger name="me.fullstacker.gateway" level="#logback.loglevel#"/>
+   	
+ 	<logger name="com.ibm" level="WARN"/>
+    <logger name="javax.activation" level="WARN"/>
+    <logger name="javax.mail" level="WARN"/>
+    <logger name="javax.management.remote" level="WARN"/>
+    <logger name="javax.xml.bind" level="WARN"/>
+    <logger name="ch.qos.logback" level="WARN"/>
+    <logger name="com.codahale.metrics" level="WARN"/>
+    <logger name="com.netflix" level="WARN"/>
+    <logger name="com.netflix.discovery" level="WARN"/>
+    <logger name="com.ryantenney" level="WARN"/>
+    <logger name="com.sun" level="WARN"/>
+    <logger name="io.undertow" level="WARN"/>
+    <logger name="io.undertow.websockets.jsr" level="WARN"/>
+    <logger name="org.apache" level="WARN"/>
+    <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
+    <logger name="org.springframework" level="WARN"/>
+    <logger name="org.springframework.web" level="WARN"/>
+    <logger name="org.springframework.security" level="WARN"/>
+    <logger name="org.springframework.cache" level="WARN"/>
+    <logger name="org.thymeleaf" level="WARN"/>
+    <logger name="springfox" level="WARN"/>
+    <logger name="sun.rmi" level="WARN"/>    
+    <logger name="sun.net.www" level="WARN"/>
+    <logger name="sun.rmi.transport" level="WARN"/>
+    <logger name="com.hazelcast" level="INFO"/>
+    <logger name="com.zaxxer" level="WARN"/>
+    <logger name="org.hibernate.validator" level="WARN"/>
+    <logger name="org.hibernate" level="WARN"/>
+    <logger name="org.hibernate.ejb.HibernatePersistence" level="WARN"/>
+    <logger name="org.xnio" level="WARN"/> 
+    
+ 	<logger name="UI-ADMIN-LOG" level="info">
+    	<appender-ref ref="UI_ADMIN_LOG" />
+	</logger>
+	
+	<logger name="UI-CCM-LOG" level="info">
+    	<appender-ref ref="UI_CCM_LOG" />
+	</logger>
+	
+   <root level="#logback.loglevel#">
+        <springProfile name="dev">
+            <appender-ref ref="CONSOLE" />
+        </springProfile>
+        <appender-ref ref="ASYNC" />
+    </root>
+
+    <!-- https://logback.qos.ch/manual/configuration.html#shutdownHook and https://jira.qos.ch/browse/LOGBACK-1090 -->
+    <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
+
+    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+        <resetJUL>true</resetJUL>
+    </contextListener>
+
+</configuration>

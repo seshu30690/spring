@@ -1,0 +1,25 @@
+<jboss-deployment-structure xmlns="urn:jboss:deployment-structure:1.2">
+   	<deployment>
+		<dependencies>
+			<!-- Add some dependencies because of javaee.api exclusion -->
+			<module name="javax.xml.bind.api" />
+			<module name="javax.xml.ws.api" />
+			<module name="javax.jws.api" />
+			<module name="javax.annotation.api" />
+			<module name="com.sun.xml.messaging.saaj" />
+		</dependencies>
+
+		<exclusions>
+			<module name="javaee.api" />
+			<module name="org.slf4j" />
+			<module name="org.slf4j.impl" />
+		</exclusions>
+		
+		<exclude-subsystems>
+			<subsystem name="jpa" />
+			<subsystem name="weld" />
+			<subsystem name="webservices" />
+			<subsystem name="jaxrs" />
+		</exclude-subsystems>
+	</deployment>
+</jboss-deployment-structure>
